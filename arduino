@@ -1,0 +1,68 @@
+#include <iarduino_RTC.h>               // / iarduino_RTC for working with real-time modules
+iarduino_RTC time(RTC_DS1302, 8, 6, 7); // The time object for the module DS1302, to the conclusions of RST, CLK, DAT
+int IN4 = 5;
+int IN3 = 4;
+int IN2 = 3;
+int IN1 = 2;    
+//int H;        //  hours in 24-hour format from 0 to 23
+int i;        //  minutes from 0 to 59
+//int y;        //  year without century from 0 to 99
+//int on = 2;  //  on 24-hour format from 0 to 23
+int off = 3; //  off in 24-hour format from 0 to 23
+void setup(){
+  delay(300);
+  time.begin();
+  
+  Serial.begin(9600);
+  pinMode (IN4, OUTPUT);
+  pinMode (IN3, OUTPUT);
+  pinMode (IN2, OUTPUT);
+  pinMode (IN1, OUTPUT);
+  //time.settime(0,20,10,7,2,19);          // enable debugging
+  if (time.year == 1) {                   // if the clock is reset
+    Serial.setTimeout(1000);             // input timeout
+    //Serial.println("hours:    12"); H = Serial.parseInt();
+    Serial.println("minutes:  1"); i = Serial.parseInt();
+    //Serial.println("year:     19"); y = Serial.parseInt();
+    time.settime(1);
+  }
+  else 
+  Serial.print("Time and year = "); Serial.println(time.gettime("H:i Y"));
+  time.period(i);
+  Serial.end();
+}
+void loop() {
+    if(millis()%60000==0){ // if 1 second has passed
+      Serial.println(time.gettime("d-m-Y, H:i:s, D")); // display time
+      delay(1); // suspend for 1 ms, so as not to display time several times in 1ms
+    
+ digitalWrite (IN1, HIGH);
+ digitalWrite (IN2, HIGH);
+ digitalWrite (IN3, LOW);
+ digitalWrite (IN4, LOW);
+ delay(1);
+  
+ delay(002000);
+ digitalWrite (IN1, LOW);
+ digitalWrite (IN2, LOW);
+ digitalWrite (IN3, LOW);
+ digitalWrite (IN4, LOW);
+ delay(1);
+  delay(i);
+  
+ 
+ digitalWrite (IN1, LOW);
+ digitalWrite (IN2, LOW);
+ digitalWrite (IN3, HIGH);
+ digitalWrite (IN4, HIGH);
+ delay(1);
+  delay(002000);
+ 
+ digitalWrite (IN1, LOW);
+ digitalWrite (IN2, LOW);
+ digitalWrite (IN3, LOW);
+ digitalWrite (IN4, LOW);
+
+  delay(1);
+  delay(i);
+}
